@@ -6,9 +6,18 @@
     </Properties>
 
     <Appenders>
-        <Console name="CONSOLE" target="SYSTEM_OUT">
+        <RollingRandomAccessFile name="FILE"
+                                 fileName="${sys:user.home}/logs/steve.log"
+                                 filePattern="${sys:user.home}/logs/steve-%d{yyyy-MM-dd}-%i.log.gz"
+                                 immediateFlush="false"
+                                 append="true">
             <PatternLayout pattern="${logPattern}"/>
-        </Console>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingRandomAccessFile>
     </Appenders>
 
     <Loggers>
@@ -22,13 +31,15 @@
         <AsyncLogger name="org.springframework" level="INFO"/>
         <AsyncLogger name="org.springframework.security" level="INFO"/>
         <AsyncLogger name="org.springframework.web.servlet" level="INFO"/>
+        <AsyncLogger name="de.rwth.idsg.steve" level="INFO"/>
 
         <AsyncLogger name="org.apache.jasper" level="WARN"/>
         <AsyncLogger name="org.apache.tomcat.util" level="WARN"/>
+        <AsyncLogger name="de.rwth.idsg.steve" level="DEBUG"/>
         <AsyncLogger name="jndi" level="WARN"/>
 
         <AsyncRoot level="DEBUG">
-            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
         </AsyncRoot>
     </Loggers>
 </Configuration>
